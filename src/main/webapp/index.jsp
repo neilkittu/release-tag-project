@@ -7,6 +7,6 @@
 <title>Hello</title>
 </head>
 <body>
-<h1>Hello From the Server</h1>
+<h1>Hello From the staging Server</h1>
 </body>
 </html>
