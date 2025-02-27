@@ -1,2 +1,4 @@
-/build/
-/.settings/
+# Ignore Eclipse-specific files
+.settings/
+.project
+.classpath
