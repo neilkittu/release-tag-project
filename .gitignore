@@ -1,4 +1,18 @@
-# Ignore Eclipse-specific files
+# Ignore compiled files and build outputs
+target/
+*.class
+*.war
+
+# Ignore IDE and Eclipse-specific files
 .settings/
 .project
 .classpath
+#.m2e-wtp/
+maven-archiver/
+maven-status/
+maven/
+
+# Ignore logs and temp files
+#*.log
+#*.tmp
+
