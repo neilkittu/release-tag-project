@@ -3,6 +3,9 @@ target/
 *.class
 *.war
 
+# Ignore dependencies in WEB-INF/lib (managed by Maven)
+src/main/webapp/WEB-INF/lib/*.jar
+
 # Ignore IDE and Eclipse-specific files
 .settings/
 .project
