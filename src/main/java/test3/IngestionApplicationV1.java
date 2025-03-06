@@ -1,4 +1,4 @@
-package test_3;
+package test3;
 
 import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;

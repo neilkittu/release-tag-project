@@ -1,4 +1,4 @@
-package test_3;
+package test3;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -14,4 +14,5 @@ public String getHello() {
 	return CLICHED_MESSAGE;
 	}
 }
+
 
