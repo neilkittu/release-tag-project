@@ -77,6 +77,12 @@ jobs:
           rm -rf ${{ env.TOMCAT_PATH }}/${{ env.Service_Name }}
           rm -f ${{ env.TOMCAT_PATH }}/*.war
           EOF
+      - name: Debug Remote Webapps Directory
+        run: |
+          echo "Checking if Tomcat webapps directory exists..."
+          ssh -i ~/.ssh/deploy_key ${{ env.REMOTE_USER }}@${{ env.REMOTE_HOST }} <<EOF
+          ls -ld ${{ env.TOMCAT_PATH }} || echo "❌ ERROR: Webapps directory does not exist!"
+          EOF
       - name: Deploy WAR to Tomcat
         run: |
           echo "Moving WAR file to Tomcat webapps directory"
