@@ -36,7 +36,7 @@ jobs:
       - name: Build Project
         run: |
           mvn clean package
-          echo "Listing target directory contents:"
+          echo "Listing target directory contents"
           ls -ltr target/
       - name: Extract WAR file name
         run: |
