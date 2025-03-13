@@ -42,14 +42,14 @@ jobs:
         run: |
           WAR_NAME=$(ls target/*.war | xargs -n1 basename)
           echo "WAR_FILE_NAME=${WAR_NAME}" >> $GITHUB_ENV
-          echo "Service Name: ${WAR_NAME%.war}" >> $GITHUB_ENV
+          echo "SERVICE_NAME=${WAR_NAME%.war}" >> $GITHUB_ENV
           echo "API_ENDPOINT=http://${{ env.REMOTE_HOST }}:8090/${WAR_NAME%.war}/v1.0/helloworld" >> $GITHUB_ENV
           echo "Extracted WAR File: $WAR_NAME"
           echo "API Endpoint: http://${{ env.REMOTE_HOST }}:8090/${WAR_NAME%.war}/v1.0/helloworld"
       - name: Debug Extracted Variables
         run: |
           echo "WAR File Name: ${{ env.WAR_FILE_NAME }}"
-          echo "Service Name: ${{ env.Service_Name }}"
+          echo "Service Name: ${{ env.SERVICE_NAME }}"
           echo "API Endpoint: ${{ env.API_ENDPOINT }}"
       - name: Set Up SSH Key
         run: |
