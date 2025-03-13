@@ -6,7 +6,7 @@ import jakarta.ws.rs.Produces;
 
 @Path("helloworld")
 public class HelloResource {
-	public static final String CLICHED_MESSAGE = "Hello World!";
+	public static final String CLICHED_MESSAGE = "Hello World";
 
 @GET
 @Produces("text/plain")
