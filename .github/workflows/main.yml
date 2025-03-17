@@ -33,11 +33,13 @@ jobs:
       - name: Debug System Info
         run: |
           echo "Runner Hostname: $(hostname)"
+          
       - name: Build Project
         run: |
           mvn clean package
           echo "Listing target directory contents"
           ls -ltr target/
+          
       - name: Extract WAR file name
         run: |
           WAR_NAME=$(ls target/*.war | xargs -n1 basename)
@@ -46,23 +48,27 @@ jobs:
           echo "API_ENDPOINT=http://${{ env.REMOTE_HOST }}:8090/${WAR_NAME%.war}/v1.0/helloworld" >> $GITHUB_ENV
           echo "Extracted WAR File: $WAR_NAME"
           echo "API Endpoint: http://${{ env.REMOTE_HOST }}:8090/${WAR_NAME%.war}/v1.0/helloworld"
+          
       - name: Debug Extracted Variables
         run: |
           echo "WAR File Name: ${{ env.WAR_FILE_NAME }}"
           echo "Service Name: ${{ env.SERVICE_NAME }}"
           echo "API Endpoint: ${{ env.API_ENDPOINT }}"
+          
       - name: Set Up SSH Key
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H ${{ env.REMOTE_HOST }} >> ~/.ssh/known_hosts
+          
       - name: Copy WAR to Remote Server
         run: |
           echo "Checking if WAR file exists"
           ls -l target/${{ env.WAR_FILE_NAME }} || { echo "WAR file not found!"; exit 1; }
           echo "Copying WAR file to remote server"
           scp -i ~/.ssh/deploy_key target/${{ env.WAR_FILE_NAME }} ${{ env.REMOTE_USER }}@${{ env.REMOTE_HOST }}:${{ env.REMOTE_PATH }}/
+          
       - name: Stop Tomcat
         run: |
           echo "Stopping Tomcat on remote server"
@@ -70,19 +76,22 @@ jobs:
           /home/nchattopadhyay/apache-tomcat-11.0.4/bin/shutdown.sh
           sleep 5
           EOF
+          
       - name: Remove Old Deployment
         run: |
           echo "Deleting old deployment on remote server"
           ssh -i ~/.ssh/deploy_key ${{ env.REMOTE_USER }}@${{ env.REMOTE_HOST }} <<EOF
-          rm -rf ${{ env.TOMCAT_PATH }}/${{ env.Service_Name }}
+          rm -rf ${{ env.TOMCAT_PATH }}/${{ env.SERVICE_NAME }}
           rm -f ${{ env.TOMCAT_PATH }}/*.war
           EOF
+          
       - name: Debug Remote Webapps Directory
         run: |
-          echo "Checking if Tomcat webapps directory exists..."
+          echo "Checking if Tomcat webapps directory exists"
           ssh -i ~/.ssh/deploy_key ${{ env.REMOTE_USER }}@${{ env.REMOTE_HOST }} <<EOF
-          ls -ld ${{ env.TOMCAT_PATH }} || echo "❌ ERROR: Webapps directory does not exist!"
+          ls -ld ${{ env.TOMCAT_PATH }} || echo "Webapps directory does not exist"
           EOF
+          
       - name: Deploy WAR to Tomcat
         run: |
           echo "Moving WAR file to Tomcat webapps directory"
@@ -90,6 +99,7 @@ jobs:
           cp ${{ env.REMOTE_PATH }}/${{ env.WAR_FILE_NAME }} ${{ env.TOMCAT_PATH }}/${{ env.WAR_FILE_NAME }}
           ls -lh ${{ env.TOMCAT_PATH }}/${{ env.WAR_FILE_NAME }}
           EOF
+          
       - name: Start Tomcat
         run: |
           echo "Starting Tomcat"
@@ -99,6 +109,7 @@ jobs:
           echo "Checking if Tomcat process is running"
           ps aux | grep catalina | grep -v grep
           EOF
+          
       - name: Test API Endpoint
         run: |
           echo "Testing API Endpoint: ${{ env.API_ENDPOINT }}"
